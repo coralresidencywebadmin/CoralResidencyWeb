@@ -241,7 +241,9 @@
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#home">🏘 Our Community</a>
+    <a class="nav-logo" href="#home"><script>
+document.getElementById("loggedInUser").textContent =localStorage.getItem("userName") || "User";
+</script></a>
     <div class="nav-links" id="navLinks">
       <a href="#announcements">Announcements</a>
       <a href="#events">Events</a>
@@ -257,7 +259,7 @@
 
 <!-- HERO -->
 <section class="hero" id="home">
-  <div class="hero-badge">Housing Community Portal</div>
+  <div class="hero-badge">Welcome to</div>
   <h1>Welcome to<br>Maple Grove Residences</h1>
   <p>Your one-stop portal for community news, events, important documents, and service contacts.</p>
   <div class="hero-actions">
