@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Housing Community</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1B4332;
+    --navy-light: #2D6A4F;
+    --gold: #C9952A;
+    --gold-light: #F0C860;
+    --bg: #F7F8FA;
+    --white: #ffffff;
+    --text: #1e2a3a;
+    --muted: #5a6a7e;
+    --border: #dce3ed;
+    --green: #2a7a4b;
+    --red: #b03a2e;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--navy);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 60px;
+  }
+  .nav-logo {
+    font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600;
+    color: var(--gold-light); text-decoration: none; letter-spacing: .01em;
+  }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a {
+    color: rgba(255,255,255,.8); text-decoration: none;
+    font-size: .85rem; font-weight: 500;
+    padding: 6px 12px; border-radius: 6px;
+    transition: background .15s, color .15s;
+  }
+  .nav-links a:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; }
+  .hamburger span { width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: .3s; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: #fff; padding: 72px 24px 64px; text-align: center;
+  }
+  .hero-badge {
+    display: inline-block; background: var(--gold); color: var(--navy);
+    font-size: .75rem; font-weight: 600; letter-spacing: .05em;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Lora', serif; font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600; line-height: 1.2; margin-bottom: 14px;
+  }
+  .hero p {
+    font-size: 1.05rem; color: rgba(255,255,255,.75);
+    max-width: 520px; margin: 0 auto 32px;
+  }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 11px 24px; border-radius: 8px;
+    font-size: .9rem; font-weight: 600; text-decoration: none; cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+  .btn:hover { opacity: .88; transform: translateY(-1px); }
+  .btn-primary { background: var(--gold); color: var(--navy); }
+  .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.45); }
+  .btn-outline:hover { border-color: #fff; }
+
+  /* ── LAYOUT ── */
+  .section { padding: 60px 24px; }
+  .section-alt { background: var(--white); }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-header { margin-bottom: 36px; }
+  .section-header h2 {
+    font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600;
+    color: var(--navy); margin-bottom: 6px;
+  }
+  .section-header p { color: var(--muted); font-size: .95rem; }
+  .divider {
+    width: 40px; height: 3px; background: var(--gold);
+    border-radius: 2px; margin: 10px 0 0;
+  }
+
+  /* ── ANNOUNCEMENTS ── */
+  .announce-grid { display: grid; gap: 16px; }
+  .announce-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 24px;
+    display: flex; gap: 16px; align-items: flex-start;
+    transition: box-shadow .15s;
+  }
+  .section-alt .announce-card { background: var(--bg); }
+  .announce-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+  .announce-icon {
+    width: 40px; height: 40px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .icon-info { background: #e6f4ec; }
+  .icon-warn { background: #fef3e2; }
+  .icon-ok   { background: #e6f4ec; }
+  .announce-body h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+  .announce-body p  { font-size: .88rem; color: var(--muted); margin-bottom: 6px; }
+  .announce-date { font-size: .78rem; color: var(--gold); font-weight: 500; }
+
+  /* ── EVENTS ── */
+  .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .event-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+    transition: box-shadow .15s;
+  }
+  .event-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.09); }
+  .event-date-bar {
+    background: var(--navy); color: #fff;
+    padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+  }
+  .event-date-num { font-family: 'Lora', serif; font-size: 1.8rem; font-weight: 600; line-height: 1; }
+  .event-date-meta { font-size: .8rem; opacity: .8; }
+  .event-body { padding: 16px; }
+  .event-body h3 { font-size: .95rem; font-weight: 600; margin-bottom: 6px; }
+  .event-body p  { font-size: .84rem; color: var(--muted); }
+  .event-tag {
+    display: inline-block; margin-top: 10px;
+    background: #e6f4ec; color: var(--navy);
+    font-size: .73rem; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+  }
+
+  /* ── DOCUMENTS ── */
+  .docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .doc-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px;
+    display: flex; gap: 14px; align-items: center;
+    text-decoration: none; color: var(--text);
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .doc-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); border-color: var(--gold); }
+  .doc-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .doc-info h4 { font-size: .9rem; font-weight: 600; margin-bottom: 2px; }
+  .doc-info span { font-size: .78rem; color: var(--muted); }
+
+  /* ── CONTACTS ── */
+  .contacts-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 7px 18px; border-radius: 20px; border: 1.5px solid var(--border);
+    background: transparent; cursor: pointer; font-size: .85rem; font-weight: 500;
+    color: var(--muted); transition: all .15s;
+  }
+  .tab-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .contacts-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .contacts-table thead { background: var(--navy); color: #fff; }
+  .contacts-table th { padding: 12px 16px; font-size: .82rem; font-weight: 600; text-align: left; letter-spacing: .02em; }
+  .contacts-table td { padding: 12px 16px; font-size: .88rem; border-bottom: 1px solid var(--border); }
+  .contacts-table tr:last-child td { border-bottom: none; }
+  .contacts-table tr:hover td { background: var(--bg); }
+  .contact-type {
+    display: inline-block; font-size: .72rem; font-weight: 600;
+    padding: 2px 10px; border-radius: 20px;
+  }
+  .type-primary   { background: #e6f4ec; color: #1B4332; }
+  .type-emergency { background: #fde8e8; color: #8b1a1a; }
+  .type-general   { background: #e6f4ec; color: #1a5c35; }
+  .contact-panel { display: none; }
+  .contact-panel.active { display: block; }
+
+  /* ── CONTACT FORM ── */
+  .form-wrap {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 36px; max-width: 640px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: .9rem; font-family: inherit;
+    background: var(--bg); color: var(--text);
+    transition: border-color .15s;
+    outline: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--navy); background: #fff; }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-submit {
+    background: var(--navy); color: #fff;
+    border: none; padding: 12px 28px; border-radius: 8px;
+    font-size: .9rem; font-weight: 600; cursor: pointer;
+    transition: background .15s;
+  }
+  .form-submit:hover { background: var(--navy-light); }
+  .form-note { font-size: .8rem; color: var(--muted); margin-top: 12px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy); color: rgba(255,255,255,.65);
+    text-align: center; padding: 28px 24px; font-size: .82rem;
+  }
+  footer strong { color: rgba(255,255,255,.9); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--navy); padding: 12px 16px; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .form-row { grid-template-columns: 1fr; }
+    .form-wrap { padding: 24px 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#home">🏘 Our Community</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#announcements">Announcements</a>
+      <a href="#events">Events</a>
+      <a href="#documents">Documents</a>
+      <a href="#contacts">Key Contacts</a>
+      <a href="#contact-form">Contact Us</a>
+    </div>
+    <div class="hamburger" onclick="toggleNav()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-badge">Housing Community Portal</div>
+  <h1>Welcome to<br>Maple Grove Residences</h1>
+  <p>Your one-stop portal for community news, events, important documents, and service contacts.</p>
+  <div class="hero-actions">
+    <a href="#announcements" class="btn btn-primary">Latest Announcements</a>
+    <a href="#contact-form" class="btn btn-outline">Contact the Secretary</a>
+  </div>
+</section>
+
+<!-- ANNOUNCEMENTS -->
+<section class="section" id="announcements">
+  <div class="container">
+    <div class="section-header">
+      <h2>Announcements</h2>
+      <div class="divider"></div>
+      <p>Latest news and notices from the community management.</p>
+    </div>
+    <div class="announce-grid">
+
+      <div class="announce-card">
+        <div class="announce-icon icon-warn">📢</div>
+        <div class="announce-body">
+          <h3>Water Supply Maintenance – Block B</h3>
+          <p>Water supply to Block B will be interrupted on 12 Sep 2026 from 9 AM to 1 PM for routine pipe maintenance. Please store water in advance.</p>
+          <span class="announce-date">Posted 8 Sep 2026</span>
+        </div>
+      </div>
+
+      <div class="announce-card">
+        <div class="announce-icon icon-ok">✅</div>
+        <div class="announce-body">
+          <h3>Lift Repair Completed – Tower A</h3>
+          <p>The lift in Tower A has been fully repaired and is operational again. Thank you for your patience during the maintenance period.</p>
+          <span class="announce-date">Posted 5 Sep 2026</span>
+        </div>
+      </div>
+
+      <div class="announce-card">
+        <div class="announce-icon icon-info">📋</div>
+        <div class="announce-body">
+          <h3>Annual Maintenance Charges Due</h3>
+          <p>Residents are reminded that the annual maintenance charges for FY 2026–27 are due by 30 September 2026. Kindly pay through the approved channels listed in the documents section.</p>
+          <span class="announce-date">Posted 1 Sep 2026</span>
+        </div>
+      </div>
+
+      <div class="announce-card">
+        <div class="announce-icon icon-info">🌿</div>
+        <div class="announce-body">
+          <h3>Garden Renovation Update</h3>
+          <p>The common garden area is being landscaped this month. Access may be restricted on weekdays 7 AM – 12 PM until 20 Sep 2026.</p>
+          <span class="announce-date">Posted 28 Aug 2026</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="section section-alt" id="events">
+  <div class="container">
+    <div class="section-header">
+      <h2>Events & Meetings</h2>
+      <div class="divider"></div>
+      <p>Upcoming community events, general body meetings, and more.</p>
+    </div>
+    <div class="events-grid">
+
+      <div class="event-card">
+        <div class="event-date-bar">
+          <div class="event-date-num">15</div>
+          <div class="event-date-meta">September 2026<br>6:30 PM</div>
+        </div>
+        <div class="event-body">
+          <h3>Monthly Residents' Meeting</h3>
+          <p>Community Hall, Ground Floor. Agenda includes maintenance charges, parking policy, and security camera updates.</p>
+          <span class="event-tag">📍 Community Hall</span>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-date-bar">
+          <div class="event-date-num">22</div>
+          <div class="event-date-meta">September 2026<br>10:00 AM</div>
+        </div>
+        <div class="event-body">
+          <h3>Community Clean-Up Drive</h3>
+          <p>Join your neighbours for our quarterly clean-up of common areas, walkways, and gardens. Gloves and bags provided.</p>
+          <span class="event-tag">♻️ Common Areas</span>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-date-bar">
+          <div class="event-date-num">05</div>
+          <div class="event-date-meta">October 2026<br>7:00 PM</div>
+        </div>
+        <div class="event-body">
+          <h3>Diwali Celebrations</h3>
+          <p>Annual community Diwali celebration with cultural performances, snacks, and decoration of common areas.</p>
+          <span class="event-tag">🪔 Central Courtyard</span>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-date-bar">
+          <div class="event-date-num">20</div>
+          <div class="event-date-meta">October 2026<br>11:00 AM</div>
+        </div>
+        <div class="event-body">
+          <h3>Annual General Body Meeting</h3>
+          <p>Annual AGM to review finances, elect committee members, and plan upcoming infrastructure improvements.</p>
+          <span class="event-tag">📍 Community Hall</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DOCUMENTS -->
+<section class="section" id="documents">
+  <div class="container">
+    <div class="section-header">
+      <h2>Rules & Documents</h2>
+      <div class="divider"></div>
+      <p>Community bylaws, forms, and reference documents. Click to download.</p>
+    </div>
+    <div class="docs-grid">
+      <a class="doc-card" href="#">
+        <div class="doc-icon">📄</div>
+        <div class="doc-info">
+          <h4>Community Bylaws</h4>
+          <span>PDF · Revised 2024</span>
+        </div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="doc-icon">🅿️</div>
+        <div class="doc-info">
+          <h4>Parking Policy</h4>
+          <span>PDF · Updated Jan 2026</span>
+        </div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="doc-icon">🐾</div>
+        <div class="doc-info">
+          <h4>Pet Policy</h4>
+          <span>PDF · 2023</span>
+        </div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="doc-icon">🔧</div>
+        <div class="doc-info">
+          <h4>Renovation Guidelines</h4>
+          <span>PDF · Updated 2025</span>
+        </div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="doc-icon">🗓</div>
+        <div class="doc-info">
+          <h4>Maintenance Fee Schedule</h4>
+          <span>PDF · FY 2026–27</span>
+        </div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="doc-icon">📝</div>
+        <div class="doc-info">
+          <h4>Move-In / Move-Out Form</h4>
+          <span>DOCX · Fillable</span>
+        </div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="doc-icon">🏦</div>
+        <div class="doc-info">
+          <h4>Payment & Bank Details</h4>
+          <span>PDF · 2026</span>
+        </div>
+      </a>
+      <a class="doc-card" href="#">
+        <div class="doc-icon">📊</div>
+        <div class="doc-info">
+          <h4>AGM Minutes 2025</h4>
+          <span>PDF · Oct 2025</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- KEY CONTACTS -->
+<section class="section section-alt" id="contacts">
+  <div class="container">
+    <div class="section-header">
+      <h2>Key Contacts</h2>
+      <div class="divider"></div>
+      <p>Approved service providers, emergency services, and government contacts.</p>
+    </div>
+
+    <div class="contacts-tabs">
+      <button class="tab-btn active" onclick="showTab('management')">Management</button>
+      <button class="tab-btn" onclick="showTab('plumbing')">Plumbing</button>
+      <button class="tab-btn" onclick="showTab('electrical')">Electrical</button>
+      <button class="tab-btn" onclick="showTab('emergency')">Emergency</button>
+      <button class="tab-btn" onclick="showTab('govt')">Government</button>
+    </div>
+
+    <div id="management" class="contact-panel active">
+      <table class="contacts-table">
+        <thead><tr><th>Name / Role</th><th>Contact</th><th>Availability</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Mr. Ramesh Kumar</strong><br>Society Secretary</td><td>98100 00001</td><td>Mon–Sat, 9 AM–7 PM</td><td><span class="contact-type type-primary">Primary</span></td></tr>
+          <tr><td><strong>Mrs. Priya Sharma</strong><br>Chairperson</td><td>98100 00002</td><td>Mon–Sat, 10 AM–6 PM</td><td><span class="contact-type type-primary">Primary</span></td></tr>
+          <tr><td><strong>Mr. Ajay Mehta</strong><br>Treasurer</td><td>98100 00003</td><td>Mon–Fri, 6 PM–8 PM</td><td><span class="contact-type type-general">General</span></td></tr>
+          <tr><td><strong>Security Desk</strong><br>Main Gate</td><td>98100 00004</td><td>24 × 7</td><td><span class="contact-type type-emergency">Emergency</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="plumbing" class="contact-panel">
+      <table class="contacts-table">
+        <thead><tr><th>Name / Company</th><th>Contact</th><th>Availability</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Vijay Plumbing Works</strong><br>Approved Vendor</td><td>98200 00010</td><td>Mon–Sat, 8 AM–6 PM</td><td><span class="contact-type type-primary">Primary</span></td></tr>
+          <tr><td><strong>AquaFix Services</strong><br>Approved Vendor</td><td>98200 00011</td><td>Mon–Sun, 7 AM–9 PM</td><td><span class="contact-type type-general">General</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="electrical" class="contact-panel">
+      <table class="contacts-table">
+        <thead><tr><th>Name / Company</th><th>Contact</th><th>Availability</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Bright Spark Electricals</strong><br>Approved Vendor</td><td>98300 00020</td><td>Mon–Sat, 9 AM–7 PM</td><td><span class="contact-type type-primary">Primary</span></td></tr>
+          <tr><td><strong>PowerCare Solutions</strong><br>Approved Vendor</td><td>98300 00021</td><td>24 × 7</td><td><span class="contact-type type-emergency">Emergency</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="emergency" class="contact-panel">
+      <table class="contacts-table">
+        <thead><tr><th>Service</th><th>Number</th><th>Notes</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Police Control Room</strong></td><td>100</td><td>National Emergency</td><td><span class="contact-type type-emergency">Emergency</span></td></tr>
+          <tr><td><strong>Fire Department</strong></td><td>101</td><td>National Emergency</td><td><span class="contact-type type-emergency">Emergency</span></td></tr>
+          <tr><td><strong>Ambulance</strong></td><td>108</td><td>National Emergency</td><td><span class="contact-type type-emergency">Emergency</span></td></tr>
+          <tr><td><strong>Local Police Station</strong></td><td>98400 00030</td><td>Sector 12 Station</td><td><span class="contact-type type-primary">Primary</span></td></tr>
+          <tr><td><strong>Nearest Hospital</strong><br>City General Hospital</td><td>98400 00031</td><td>2.5 km from gate</td><td><span class="contact-type type-general">General</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="govt" class="contact-panel">
+      <table class="contacts-table">
+        <thead><tr><th>Office / Authority</th><th>Contact</th><th>Purpose</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Municipal Corporation</strong><br>Ward Office</td><td>98500 00040</td><td>Property tax, civic issues</td><td><span class="contact-type type-general">General</span></td></tr>
+          <tr><td><strong>Water Department</strong></td><td>98500 00041</td><td>Water supply complaints</td><td><span class="contact-type type-general">General</span></td></tr>
+          <tr><td><strong>Electricity Board</strong></td><td>98500 00042</td><td>Power outage, billing</td><td><span class="contact-type type-general">General</span></td></tr>
+          <tr><td><strong>Local Tehsildar</strong></td><td>98500 00043</td><td>Property records, certificates</td><td><span class="contact-type type-general">General</span></td></tr>
+          <tr><td><strong>Consumer Forum</strong></td><td>1800 11 4000</td><td>Consumer complaints (toll-free)</td><td><span class="contact-type type-general">General</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT FORM -->
+<section class="section" id="contact-form">
+  <div class="container">
+    <div class="section-header">
+      <h2>Contact the Secretary</h2>
+      <div class="divider"></div>
+      <p>Submit complaints, requests, or queries. We aim to respond within 2 working days.</p>
+    </div>
+    <div class="form-wrap">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">Full Name</label>
+          <input type="text" id="fname" placeholder="Your full name" />
+        </div>
+        <div class="form-group">
+          <label for="flat">Flat / Unit No.</label>
+          <input type="text" id="flat" placeholder="e.g. A-304" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="98xxx xxxxx" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="you@email.com" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="">Select a category</option>
+          <option>Maintenance / Repair</option>
+          <option>Security Concern</option>
+          <option>Noise / Disturbance</option>
+          <option>Parking Issue</option>
+          <option>Common Area Complaint</option>
+          <option>Billing / Charges</option>
+          <option>Move-In / Move-Out</option>
+          <option>General Inquiry</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message">Your Message</label>
+        <textarea id="message" placeholder="Describe your issue or request in detail…"></textarea>
+      </div>
+      <button class="form-submit" onclick="submitForm()">Send Message</button>
+      <p class="form-note">⚠️ For urgent matters, please contact the Security Desk directly at <strong>98100 00004</strong> (24×7).</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Maple Grove Residences</strong> · Managed by the Residents' Welfare Association</p>
+  <p style="margin-top:6px;">Secretary: <strong>Mr. Ramesh Kumar</strong> · secretary@maplegrove.community</p>
+  <p style="margin-top:6px; font-size:.75rem;">Last updated: September 2026 · For emergencies call <strong>98100 00004</strong></p>
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  function showTab(id) {
+    document.querySelectorAll('.contact-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function submitForm() {
+    const name = document.getElementById('fname').value.trim();
+    const flat = document.getElementById('flat').value.trim();
+    const msg  = document.getElementById('message').value.trim();
+    if (!name || !flat || !msg) {
+      alert('Please fill in your name, flat number, and message before submitting.');
+      return;
+    }
+    alert('Thank you, ' + name + '! Your message has been received. The secretary will respond within 2 working days.');
+  }
+
+  // Close mobile nav on link click
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+  });
+</script>
+</body>
+</html>
